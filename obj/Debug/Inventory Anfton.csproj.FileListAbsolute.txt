@@ -77,3 +77,7 @@ D:\MyData\sample projects\MVC & Core Projects\Inventory Anfton\Inventory Anfton\
 D:\MyData\sample projects\MVC & Core Projects\Inventory Anfton\Inventory Anfton\obj\Debug\Inventory Anfton.csproj.CopyComplete
 D:\MyData\sample projects\MVC & Core Projects\Inventory Anfton\Inventory Anfton\obj\Debug\Inventory Anfton.dll
 D:\MyData\sample projects\MVC & Core Projects\Inventory Anfton\Inventory Anfton\obj\Debug\Inventory Anfton.pdb
+D:\MyData\sample projects\MVC & Core Projects\Inventory Anfton\Inventory Anfton\bin\EntityFramework.dll
+D:\MyData\sample projects\MVC & Core Projects\Inventory Anfton\Inventory Anfton\bin\EntityFramework.SqlServer.dll
+D:\MyData\sample projects\MVC & Core Projects\Inventory Anfton\Inventory Anfton\bin\EntityFramework.xml
+D:\MyData\sample projects\MVC & Core Projects\Inventory Anfton\Inventory Anfton\bin\EntityFramework.SqlServer.xml

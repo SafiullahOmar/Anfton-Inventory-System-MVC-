@@ -9,7 +9,7 @@ namespace Inventory_Anfton.Controllers
     public class MasterController : Controller
     {
         // GET: Master
-        public ActionResult Index()
+        public ActionResult Category()
         {
             return View();
         }
