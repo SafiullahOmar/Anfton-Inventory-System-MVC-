@@ -19,7 +19,7 @@
                             </div>
                             <div class="custom-control custom-checkbox mb-2">
                                 <input type="checkbox" class="custom-control-input input-mini" id="closeButton" value="checked" />
-                                <label class="custom-control-label" for="closeButton">Is Active</label> 
+                                <label class="custom-control-label" for="closeButton">Is Active</label>
                             </div>
 
                         </div>
@@ -30,3 +30,46 @@
         </div>
     </div>
 </div>
+
+@section scripts{
+    <script type="text/javascript">
+    $(document).ready(function () {
+        $('#categoryform').validate({
+            rules: {
+                Name: { required: true },
+            },
+            messages: {
+                Name:"Enter valid Name"
+            },
+
+            submitHandler: function (e) {
+                var chk = 0;
+                if ($('#closeButton').prop('checked') == true) {
+                    chk = 1;
+                }
+
+                var RequestCls = {
+                    Name: $('#txtName').val(),
+                    Active: chk
+
+                }
+
+                var URLApi = '@Url.Content("~")' + "Master/AddCategory";
+                $.ajax({
+                    url: URLApi,
+                    type: 'POST',
+                    data: JSON.stringify(RequestCls),
+                    contentType: 'application/json;charset=utf-8',
+                    success: function (data) {
+                        alert(data.message);
+                    },
+                    error: function (data) {
+                        alert(data.messages);
+                    }
+
+                });
+            }
+        });
+    });
+    </script>
+    }
