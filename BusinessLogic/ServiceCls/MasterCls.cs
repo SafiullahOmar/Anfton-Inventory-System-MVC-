@@ -35,13 +35,49 @@ namespace Inventory_Anfton.BusinessLogic.ServiceCls
                 }
             }
             catch (Exception ex) {
-                result.message = ex.Message.ToString();
+                result.message = ex.InnerException.Message.ToString();
                 result.status = "Error";
                 result.flag = 0;
             }
 
                 return result;
            
+        }
+
+        public CategoryRespCls GetCategory(RequestParam obj)
+        {
+            CategoryRespCls result = new CategoryRespCls();
+            result.message = "Success";
+            result.TotalRecords = 0;
+            result.data = null;
+
+            try
+            {
+
+                using (var db = dbEntity) {
+                    if (string.IsNullOrEmpty(obj.Search))
+                    {
+                        result.TotalRecords = (from x in db.Categories where x.Name.Contains(obj.Search) select x).Count();
+                        result.data = (from x in db.Categories where x.Name.Contains(obj.Search) orderby x.Id descending select x)
+                            .Skip((obj.PageNo-1) * obj.PageLength)
+                            .Take(obj.PageLength)
+                            .ToList();
+                    }
+                    else {
+                        result.TotalRecords = (from x in db.Categories   select x).Count();
+                        result.data = (from x in db.Categories  orderby x.Id descending select x)
+                            .Skip((obj.PageNo-1) * obj.PageLength)
+                            .Take(obj.PageLength)
+                            .ToList();
+                    }
+                }
+            }
+            catch (Exception ex) {
+                result.message = ex.Message.ToString();
+
+            }
+
+            return result;
         }
     }
 }

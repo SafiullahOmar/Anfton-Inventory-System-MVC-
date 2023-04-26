@@ -15,7 +15,7 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label for="Name">Name</label>
-                                <input type="text" id="txtName" class="form-control" autocomplete="off" />
+                                <input type="text" id="txtName" name="txtName" class="form-control" autocomplete="off" />
                             </div>
                             <div class="custom-control custom-checkbox mb-2">
                                 <input type="checkbox" class="custom-control-input input-mini" id="closeButton" value="checked" />
@@ -30,16 +30,30 @@
         </div>
     </div>
 </div>
+<div class="card">
+    <div class="card-body">
+        <h4 class="card-title"> Category List</h4>
+        <table id="tblCategory" class="table table-bordered dt-responsive nowrap" style="border-collapse:collapse;border-spacing:0;width:100%;">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Active</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
 
 @section scripts{
     <script type="text/javascript">
-    $(document).ready(function () {
-        $('#categoryform').validate({
+        $(document).ready(function () {
+            getCategoryRecords();
+            $('#categoryform').validate({
             rules: {
-                Name: { required: true },
+               txtName: { required: true },
             },
             messages: {
-                Name:"Enter valid Name"
+                txtName:"Enter valid Name"
             },
 
             submitHandler: function (e) {
@@ -62,6 +76,7 @@
                     contentType: 'application/json;charset=utf-8',
                     success: function (data) {
                         alert(data.message);
+                        $('#categoryform')[0].reset();
                     },
                     error: function (data) {
                         alert(data.messages);
@@ -69,7 +84,38 @@
 
                 });
             }
+            });
+        
         });
-    });
+
+        function getCategoryRecords() {
+            $('#tblCategory').DataTable({
+                "processing": true,
+                "filter": true,
+                "language":,
+                "serverSide": true,
+                "order": [0, "asc"],
+                "ajax": {
+                    "url": "/Master/GetCategory",
+                    "type": "POST",
+                    "dataType": "json",
+
+                },
+
+                "columns": [
+                    { "data": "Name", "name": "Name", "autowidth": true },
+                    {
+                        "data": "Acive", "name": "Active", "autowidth": true, "render": function (value) {
+
+                            if (value == 1) {
+                                return '<span class="badge badge-pill badge-soft-success font-size-12">Active</span>';
+                            } else {
+                                return '<span class="badge badge-pill badge-soft-danger font-size-12">In-Active</span>';
+                            }
+                        }
+                    }
+                ]
+            });
+        }
     </script>
-    }
+}

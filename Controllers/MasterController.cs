@@ -25,8 +25,15 @@ namespace Inventory_Anfton.Controllers
         [HttpPost]
         public JsonResult AddCategory(RequestCls obj) {
             var result=_master.AddCategory(obj);
-
             return Json(result,JsonRequestBehavior.AllowGet);
+        }
+        [HttpPost]
+        public JsonResult GetCategory()
+        {
+            RequestParam obj = new RequestParam();
+            var result = _master.GetCategory(obj);
+
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
     }
 }

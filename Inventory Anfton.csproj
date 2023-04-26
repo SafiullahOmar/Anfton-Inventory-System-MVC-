@@ -196,6 +196,7 @@
     <Content Include="bower_components\jquery-sparkline\dist\jquery.sparkline.min.js" />
     <Content Include="bower_components\jquery-ui\jquery-ui.min.js" />
     <Content Include="bower_components\jquery\dist\jquery.min.js" />
+    <Content Include="bower_components\jquery\dist\jquery.validate.min.js" />
     <Content Include="bower_components\jvectormap\jquery-jvectormap.css" />
     <Content Include="bower_components\moment\min\moment.min.js" />
     <Content Include="bower_components\moment\moment.js" />

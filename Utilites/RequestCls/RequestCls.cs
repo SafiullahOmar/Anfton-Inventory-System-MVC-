@@ -12,4 +12,10 @@ namespace Inventory_Anfton.Utilites.RequestCls
         public int Active { get; set; }
 
     }
+    public class RequestParam {
+        public int PageNo { get; set; }
+        public int PageLength { get; set; }
+        public string Search { get; set; }
+
+    }
 }
