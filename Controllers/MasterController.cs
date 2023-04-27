@@ -31,9 +31,17 @@ namespace Inventory_Anfton.Controllers
         public JsonResult GetCategory()
         {
             RequestParam obj = new RequestParam();
-            var result = _master.GetCategory(obj);
+            var start = Convert.ToInt32 (Request["start"]);
+            var length = Convert.ToInt16(Request["length"]);
+            var searchValue = Convert.ToString(Request["search[value]"]);
 
-            return Json(result, JsonRequestBehavior.AllowGet);
+            start = start == 0 ? 0 : start / 10;
+            obj.PageNo = start;
+            obj.PageLength = length;
+            obj.Search = searchValue;
+
+            var result = _master.GetCategory(obj);
+            return Json(new { data=result.data,recordFiltered=result.TotalRecords,recordTotal=result.TotalRecords,draw=Request["draw"]}, JsonRequestBehavior.AllowGet);
         }
     }
 }
