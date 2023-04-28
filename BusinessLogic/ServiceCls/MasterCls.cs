@@ -54,19 +54,19 @@ namespace Inventory_Anfton.BusinessLogic.ServiceCls
             try
             {
 
-                using (var db = dbEntity) {
+                using (var db = new Inventory_AnftonEntities()) {
                     if (string.IsNullOrEmpty(obj.Search))
                     {
                         result.TotalRecords = (from x in db.Categories where x.Name.Contains(obj.Search) select x).Count();
                         result.data = (from x in db.Categories where x.Name.Contains(obj.Search) orderby x.Id descending select x)
-                            .Skip((obj.PageNo-1) * obj.PageLength)
+                            .Skip((obj.PageNo == 0 ? 0 : obj.PageNo - 1) * obj.PageLength)
                             .Take(obj.PageLength)
                             .ToList();
                     }
                     else {
                         result.TotalRecords = (from x in db.Categories   select x).Count();
                         result.data = (from x in db.Categories  orderby x.Id descending select x)
-                            .Skip((obj.PageNo-1) * obj.PageLength)
+                            .Skip((obj.PageNo==0?0:obj.PageNo-1) * obj.PageLength)
                             .Take(obj.PageLength)
                             .ToList();
                     }

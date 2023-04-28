@@ -92,7 +92,6 @@
             $('#tblCategory').DataTable({
                 "processing": true,
                 "filter": true,
-                "language":,
                 "serverSide": true,
                 "order": [0, "asc"],
                 "ajax": {
@@ -101,11 +100,16 @@
                     "dataType": "json",
 
                 },
+                "language": {
+                    "emptyTable": "No record found.",
+                    "processing":
+                        '<i class="fa fa-spinner fa-spin fa-3x fa-fw" style="color:#2a2b2b;"></i><span class="sr-only">Loading...</span> '
+                },
 
                 "columns": [
                     { "data": "Name", "name": "Name", "autowidth": true },
                     {
-                        "data": "Acive", "name": "Active", "autowidth": true, "render": function (value) {
+                        "data": "Active", "name": "Active", "autowidth": true, "render": function (value) {
 
                             if (value == 1) {
                                 return '<span class="badge badge-pill badge-soft-success font-size-12">Active</span>';
