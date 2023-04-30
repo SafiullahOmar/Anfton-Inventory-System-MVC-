@@ -18,4 +18,11 @@ namespace Inventory_Anfton.Utilites.ResponseCls
         public int TotalRecords { get; set; }
         public List<Category> data { get; set; }
     }
+
+    public class ItemRespCls
+    {
+        public string message { get; set; }
+        public int TotalRecords { get; set; }
+        public List<Item> data { get; set; }
+    }
 }

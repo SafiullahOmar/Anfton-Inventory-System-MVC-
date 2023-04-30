@@ -17,6 +17,8 @@ namespace Inventory_Anfton.Controllers
             _master = new MasterCls();
         }
         // GET: Master
+
+        #region category
         public ActionResult Category()
         {
             return View();
@@ -79,5 +81,46 @@ namespace Inventory_Anfton.Controllers
             //return Json(new { draw = draw, recordsFiltered = recordsTotal, recordsTotal = recordsTotal, data = data });
             return Json(new {data=result.data,recordFiltered=result.TotalRecords,recordTotal=result.TotalRecords,draw=Request["draw"] }, JsonRequestBehavior.AllowGet);
         }
+
+        #endregion
+
+        #region Item
+        public ActionResult Item()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public JsonResult AddItem(RequestCls obj)
+        {
+            var result = _master.AddItem(obj);
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+        [HttpPost]
+        public JsonResult RemoveItem(RequestCls obj)
+        {
+            var result = _master.RemoveItem(obj);
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public JsonResult GetItem()
+        {
+            RequestParam obj = new RequestParam();
+
+            var start = Convert.ToInt32(Request["start"]);
+            var length = Convert.ToInt32(Request["length"]);
+            var searchValue = Request["search[value]"];
+
+            start = start == 0 ? 0 : start / 10;
+            obj.PageNo = start;
+            obj.PageLength = length;
+            obj.Search = searchValue;
+            var result = _master.GetItem(obj);
+            return Json(new { data = result.data, recordFiltered = result.TotalRecords, recordTotal = result.TotalRecords, draw = Request["draw"] }, JsonRequestBehavior.AllowGet);
+        }
+
+        #endregion
+
     }
 }

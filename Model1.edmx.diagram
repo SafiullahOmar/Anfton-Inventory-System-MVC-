@@ -6,6 +6,7 @@
     <edmx:Diagrams>
       <Diagram DiagramId="6a1069045adb4c69a3e116c36550d33e" Name="Diagram1">
         <EntityTypeShape EntityType="Inventory_AnftonModel.Category" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Inventory_AnftonModel.Item" Width="1.5" PointX="3.375" PointY="0.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
