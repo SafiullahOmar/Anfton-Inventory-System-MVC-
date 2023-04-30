@@ -24,13 +24,33 @@ namespace Inventory_Anfton.BusinessLogic.ServiceCls
 
             try
             {
+               
                 using (var db = dbEntity)
                 {
-                    Category category = new Category();
-                    category.Name = obj.Name;
-                    category.active = obj.Active;
-                    db.Categories.Add(category);
+                    if (obj.Id > 0)
+                    {
+                        Category resp = (from x in db.Categories where x.Id == obj.Id select x).FirstOrDefault();
+                        if (resp != null)
+                        {
+                            resp.Name = obj.Name;
+                            resp.active = obj.Active;
+                            result.message = "Data updated Succesfully";
+                        }
+                    }
+                    else {
+
+                        Category category = new Category();
+                        category.Name = obj.Name;
+                        category.active = obj.Active;
+                        db.Categories.Add(category);
+                        
+
+                    }
+
                     db.SaveChanges();
+
+
+
 
                 }
             }
@@ -43,7 +63,44 @@ namespace Inventory_Anfton.BusinessLogic.ServiceCls
                 return result;
            
         }
+        public ResponseCls RemoveCategory(RequestCls obj)
+        {
+            ResponseCls result = new ResponseCls();
+            
 
+            try
+            {
+
+                using (var db = dbEntity)
+                {
+                    if (obj.Id > 0)
+                    {
+                        Category resp = (from x in db.Categories where x.Id == obj.Id select x).FirstOrDefault();
+                        db.Categories.Remove(resp);
+                        db.SaveChanges();
+                        result.message = "Data removed Successfully";
+                        result.status = "Succes";
+                        result.flag = 1;
+                    }
+                 
+
+                    
+
+
+
+
+                }
+            }
+            catch (Exception ex)
+            {
+                result.message = ex.InnerException.Message.ToString();
+                result.status = "Error";
+                result.flag = 0;
+            }
+
+            return result;
+
+        }
         public CategoryRespCls GetCategory(RequestParam obj)
         {
             CategoryRespCls result = new CategoryRespCls();
@@ -51,11 +108,12 @@ namespace Inventory_Anfton.BusinessLogic.ServiceCls
             result.TotalRecords = 0;
             result.data = null;
 
+
             try
             {
 
                 using (var db = new Inventory_AnftonEntities()) {
-                    if (string.IsNullOrEmpty(obj.Search))
+                    if (!string.IsNullOrEmpty(obj.Search))
                     {
                         result.TotalRecords = (from x in db.Categories where x.Name.Contains(obj.Search) select x).Count();
                         result.data = (from x in db.Categories where x.Name.Contains(obj.Search) orderby x.Id descending select x)
@@ -64,10 +122,8 @@ namespace Inventory_Anfton.BusinessLogic.ServiceCls
                             .ToList();
                     }
                     else {
-                        result.TotalRecords = (from x in db.Categories   select x).Count();
+                        result.TotalRecords= (from x in db.Categories  select x).Count();
                         result.data = (from x in db.Categories  orderby x.Id descending select x)
-                            .Skip((obj.PageNo==0?0:obj.PageNo-1) * obj.PageLength)
-                            .Take(obj.PageLength)
                             .ToList();
                     }
                 }

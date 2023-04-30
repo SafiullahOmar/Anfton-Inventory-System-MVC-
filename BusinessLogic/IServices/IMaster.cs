@@ -9,7 +9,9 @@ namespace Inventory_Anfton.BusinessLogic.IServices
 {
     public interface IMaster
     {
+        
         ResponseCls AddCategory(RequestCls obj);
+        ResponseCls RemoveCategory(RequestCls obj);
         CategoryRespCls GetCategory(RequestParam obj);
     }
 }
