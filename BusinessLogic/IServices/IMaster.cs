@@ -21,7 +21,22 @@ namespace Inventory_Anfton.BusinessLogic.IServices
 
         ResponseCls AddItem(RequestCls obj);
         ResponseCls RemoveItem(RequestCls obj);
-        CategoryRespCls GetItem(RequestParam obj);
+        ItemRespCls GetItem(RequestParam obj);
+        #endregion
+
+        #region warehouse  
+
+        ResponseCls AddWarehouse(RequestCls obj);
+        ResponseCls RemoveWarehouse(RequestCls obj);
+        WarehouseRespCls GetWarehouse(RequestParam obj);
+        #endregion
+
+        #region Attribute  
+
+        ResponseCls AddAttribute(RequestCls obj);
+        ResponseCls RemoveAttribute(RequestCls obj);
+        AttributeRespCls GetAtttribute(RequestParam obj);
         #endregion
     }
+}
 }

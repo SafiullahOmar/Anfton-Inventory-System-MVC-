@@ -13,7 +13,7 @@
       <PropertyRef Name="Id" />
     </Key>
     <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="Name" Type="nchar" MaxLength="10" />
+    <Property Name="Name" Type="nvarchar" MaxLength="50" />
     <Property Name="active" Type="int" />
   </EntityType>
   <EntityContainer Name="Inventory_AnftonModelStoreContainer">

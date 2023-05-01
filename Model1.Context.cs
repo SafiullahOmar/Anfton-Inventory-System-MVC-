@@ -27,5 +27,7 @@ namespace Inventory_Anfton
     
         public virtual DbSet<Category> Categories { get; set; }
         public virtual DbSet<Item> Items { get; set; }
+        public virtual DbSet<Attribute> Attributes { get; set; }
+        public virtual DbSet<Warehouse> Warehouses { get; set; }
     }
 }

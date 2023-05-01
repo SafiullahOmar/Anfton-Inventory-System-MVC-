@@ -3,6 +3,7 @@ using Inventory_Anfton.Utilites.RequestCls;
 using Inventory_Anfton.Utilites.ResponseCls;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.Validation;
 using System.Linq;
 using System.Web;
 
@@ -159,6 +160,8 @@ namespace Inventory_Anfton.BusinessLogic.ServiceCls
                         {
                             resp.Name = obj.Name;
                             resp.active = obj.Active;
+                            //db.Items.Attach(resp);
+                            db.Entry(resp).State = System.Data.Entity.EntityState.Modified;
                             result.message = "Data updated Succesfully";
                         }
                     }
@@ -180,11 +183,22 @@ namespace Inventory_Anfton.BusinessLogic.ServiceCls
 
                 }
             }
-            catch (Exception ex)
+            //catch (Exception ex)
+            //{
+
+            //    result.message = ex.InnerException.Message.ToString();
+            //    result.status = "Error";
+            //    result.flag = 0;
+            //}
+            catch (DbEntityValidationException dbEx)
             {
-                result.message = ex.InnerException.Message.ToString();
-                result.status = "Error";
-                result.flag = 0;
+                foreach (var validationErrors in dbEx.EntityValidationErrors)
+                {
+                    foreach (var validationError in validationErrors.ValidationErrors)
+                    {
+                        result.message =validationError.PropertyName+validationError.ErrorMessage;
+                    }
+                }
             }
 
             return result;
@@ -265,6 +279,296 @@ namespace Inventory_Anfton.BusinessLogic.ServiceCls
 
             return result;
         }
+
+        #endregion
+
+        #region warehouse
+
+        public ResponseCls AddWarehouse(RequestCls obj)
+        {
+            ResponseCls result = new ResponseCls();
+            result.message = "Data Saved Successfully";
+            result.status = "Succes";
+            result.flag = 1;
+
+            try
+            {
+
+                using (var db = dbEntity)
+                {
+                    if (obj.Id > 0)
+                    {
+                        Warehouse resp = (from x in db.Warehouses where x.Id == obj.Id select x).FirstOrDefault();
+                        if (resp != null)
+                        {
+                            resp.Name = obj.Name;
+                            resp.Active = obj.Active;
+                            //db.Items.Attach(resp);
+                            db.Entry(resp).State = System.Data.Entity.EntityState.Modified;
+                            result.message = "Data updated Succesfully";
+                        }
+                    }
+                    else
+                    {
+
+                        Warehouse warehouse  = new Warehouse();
+                        warehouse.Name = obj.Name;
+                        warehouse.Active = obj.Active;
+                        db.Warehouses.Add(warehouse);
+
+
+                    }
+
+                    db.SaveChanges();
+
+
+
+
+                }
+            }
+            //catch (Exception ex)
+            //{
+
+            //    result.message = ex.InnerException.Message.ToString();
+            //    result.status = "Error";
+            //    result.flag = 0;
+            //}
+            catch (DbEntityValidationException dbEx)
+            {
+                foreach (var validationErrors in dbEx.EntityValidationErrors)
+                {
+                    foreach (var validationError in validationErrors.ValidationErrors)
+                    {
+                        result.message = validationError.PropertyName + validationError.ErrorMessage;
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        public ResponseCls RemoveWarehouse(RequestCls obj)
+        {
+            ResponseCls result = new ResponseCls();
+
+
+            try
+            {
+
+                using (var db = dbEntity)
+                {
+                    if (obj.Id > 0)
+                    {
+                        Warehouse resp = (from x in db.Warehouses where x.Id == obj.Id select x).FirstOrDefault();
+                        db.Warehouses.Remove(resp);
+                        db.SaveChanges();
+                        result.message = "Data removed Successfully";
+                        result.status = "Succes";
+                        result.flag = 1;
+                    }
+
+
+
+
+
+
+
+                }
+            }
+            catch (Exception ex)
+            {
+                result.message = ex.InnerException.Message.ToString();
+                result.status = "Error";
+                result.flag = 0;
+            }
+
+            return result;
+        }
+
+        public WarehouseRespCls GetWarehouse(RequestParam obj)
+        {
+            WarehouseRespCls result = new WarehouseRespCls();
+            result.message = "Success";
+            result.TotalRecords = 0;
+            result.data = null;
+
+
+            try
+            {
+
+                using (var db = new Inventory_AnftonEntities())
+                {
+                    if (!string.IsNullOrEmpty(obj.Search))
+                    {
+                        result.TotalRecords = (from x in db.Warehouses where x.Name.Contains(obj.Search) select x).Count();
+                        result.data = (from x in db.Warehouses where x.Name.Contains(obj.Search) orderby x.Id descending select x)
+                            .Skip((obj.PageNo == 0 ? 0 : obj.PageNo - 1) * obj.PageLength)
+                            .Take(obj.PageLength)
+                            .ToList();
+                    }
+                    else
+                    {
+                        result.TotalRecords = (from x in db.Warehouses select x).Count();
+                        result.data = (from x in db.Warehouses orderby x.Id descending select x)
+                            .ToList();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                result.message = ex.Message.ToString();
+
+            }
+
+            return result;
+        }
+
+        #endregion
+
+        #region attribute
+
+        public ResponseCls AddAttribute(RequestCls obj)
+        {
+            ResponseCls result = new ResponseCls();
+            result.message = "Data Saved Successfully";
+            result.status = "Succes";
+            result.flag = 1;
+
+            try
+            {
+
+                using (var db = dbEntity)
+                {
+                    if (obj.Id > 0)
+                    {
+                        Attribute resp = (from x in db.Attributes where x.Id == obj.Id select x).FirstOrDefault();
+                        if (resp != null)
+                        {
+                            resp.Name = obj.Name;
+                            resp.Active = obj.Active;
+                            //db.Items.Attach(resp);
+                            db.Entry(resp).State = System.Data.Entity.EntityState.Modified;
+                            result.message = "Data updated Succesfully";
+                        }
+                    }
+                    else
+                    {
+
+                        Attribute attribute = new Attribute();
+                        attribute.Name = obj.Name;
+                        attribute.Active = obj.Active;
+                        db.Attributes.Add(attribute);
+
+
+                    }
+
+                    db.SaveChanges();
+
+
+
+
+                }
+            }
+            //catch (Exception ex)
+            //{
+
+            //    result.message = ex.InnerException.Message.ToString();
+            //    result.status = "Error";
+            //    result.flag = 0;
+            //}
+            catch (DbEntityValidationException dbEx)
+            {
+                foreach (var validationErrors in dbEx.EntityValidationErrors)
+                {
+                    foreach (var validationError in validationErrors.ValidationErrors)
+                    {
+                        result.message = validationError.PropertyName + validationError.ErrorMessage;
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        public ResponseCls RemoveAttribute(RequestCls obj)
+        {
+            ResponseCls result = new ResponseCls();
+
+
+            try
+            {
+
+                using (var db = dbEntity)
+                {
+                    if (obj.Id > 0)
+                    {
+                        Attribute resp = (from x in db.Attributes where x.Id == obj.Id select x).FirstOrDefault();
+                        db.Attributes.Remove(resp);
+                        db.SaveChanges();
+                        result.message = "Data removed Successfully";
+                        result.status = "Succes";
+                        result.flag = 1;
+                    }
+
+
+
+
+
+
+
+                }
+            }
+            catch (Exception ex)
+            {
+                result.message = ex.InnerException.Message.ToString();
+                result.status = "Error";
+                result.flag = 0;
+            }
+
+            return result;
+        }
+
+        public AttributeRespCls GetAtttribute(RequestParam obj)
+        {
+            AttributeRespCls result = new AttributeRespCls();
+            result.message = "Success";
+            result.TotalRecords = 0;
+            result.data = null;
+
+
+            try
+            {
+
+                using (var db = new Inventory_AnftonEntities())
+                {
+                    if (!string.IsNullOrEmpty(obj.Search))
+                    {
+                        result.TotalRecords = (from x in db.Attributes where x.Name.Contains(obj.Search) select x).Count();
+                        result.data = (from x in db.Attributes where x.Name.Contains(obj.Search) orderby x.Id descending select x)
+                            .Skip((obj.PageNo == 0 ? 0 : obj.PageNo - 1) * obj.PageLength)
+                            .Take(obj.PageLength)
+                            .ToList();
+                    }
+                    else
+                    {
+                        result.TotalRecords = (from x in db.Attributes select x).Count();
+                        result.data = (from x in db.Attributes orderby x.Id descending select x)
+                            .ToList();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                result.message = ex.Message.ToString();
+
+            }
+
+            return result;
+        }
+
+      
+
+
 
         #endregion
     }

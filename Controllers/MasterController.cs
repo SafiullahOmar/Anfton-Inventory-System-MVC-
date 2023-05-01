@@ -122,5 +122,81 @@ namespace Inventory_Anfton.Controllers
 
         #endregion
 
+        #region Warehouse
+        public ActionResult Warehouse()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public JsonResult AddWarehouse(RequestCls obj)
+        {
+            var result = _master.AddWarehouse(obj);
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+        [HttpPost]
+        public JsonResult RemoveWarehouse(RequestCls obj)
+        {
+            var result = _master.RemoveWarehouse(obj);
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public JsonResult GetWarehouse()
+        {
+            RequestParam obj = new RequestParam();
+
+            var start = Convert.ToInt32(Request["start"]);
+            var length = Convert.ToInt32(Request["length"]);
+            var searchValue = Request["search[value]"];
+
+            start = start == 0 ? 0 : start / 10;
+            obj.PageNo = start;
+            obj.PageLength = length;
+            obj.Search = searchValue;
+            var result = _master.GetWarehouse(obj);
+            return Json(new { data = result.data, recordFiltered = result.TotalRecords, recordTotal = result.TotalRecords, draw = Request["draw"] }, JsonRequestBehavior.AllowGet);
+        }
+
+        #endregion
+
+        #region Attribute
+        public ActionResult Attribute()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public JsonResult AddAttribute(RequestCls obj)
+        {
+            var result = _master.AddAttribute(obj);
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+        [HttpPost]
+        public JsonResult RemoveAttribute(RequestCls obj)
+        {
+            var result = _master.RemoveAttribute(obj);
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public JsonResult GetAttribute()
+        {
+            RequestParam obj = new RequestParam();
+
+            var start = Convert.ToInt32(Request["start"]);
+            var length = Convert.ToInt32(Request["length"]);
+            var searchValue = Request["search[value]"];
+
+            start = start == 0 ? 0 : start / 10;
+            obj.PageNo = start;
+            obj.PageLength = length;
+            obj.Search = searchValue;
+            var result = _master.GetAtttribute(obj);
+            return Json(new { data = result.data, recordFiltered = result.TotalRecords, recordTotal = result.TotalRecords, draw = Request["draw"] }, JsonRequestBehavior.AllowGet);
+        }
+
+        #endregion
+
     }
 }
