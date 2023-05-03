@@ -12,11 +12,37 @@ namespace Inventory_Anfton.Controllers
     public class MasterController : Controller
     {
         IMaster _master;
+        IDropdown _dropdown;
         public MasterController()
         {
             _master = new MasterCls();
+            _dropdown = new DropDownCls();
         }
         // GET: Master
+
+        #region Dropdowns
+        public JsonResult BindItemddl() {
+            var result = _dropdown.BindItems();
+            List<SelectListItem> obj = new List<SelectListItem>();
+            
+                foreach (var item in result.data)
+                {
+                    obj.Add(new SelectListItem { Value = item.code.ToString(), Text = item.Text });
+                }
+            
+            return Json(obj,JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult BindCategoryddl()
+        {
+            var result = _dropdown.BindCategory();
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult BindWarehouseddl()
+        {
+            var result = _dropdown.BindWarehouse();
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+        #endregion
 
         #region category
         public ActionResult Category()
@@ -196,6 +222,34 @@ namespace Inventory_Anfton.Controllers
             return Json(new { data = result.data, recordFiltered = result.TotalRecords, recordTotal = result.TotalRecords, draw = Request["draw"] }, JsonRequestBehavior.AllowGet);
         }
 
+        #endregion
+
+        #region Product
+        public ActionResult Product() {
+            return View();
+        }
+
+        [HttpPost]
+        public JsonResult AddProduct(ProductReq obj) {
+            var result = _master.AddProduct(obj);
+            return Json(result,JsonRequestBehavior.AllowGet);
+        }
+        [HttpPost]
+        public JsonResult GetProduct()
+        {
+            RequestParam obj = new RequestParam();
+
+            var start = Convert.ToInt32(Request["start"]);
+            var length = Convert.ToInt32(Request["length"]);
+            var searchValue = Request["search[value]"];
+
+            start = start == 0 ? 0 : start / 10;
+            obj.PageNo = start;
+            obj.PageLength = length;
+            obj.Search = searchValue;
+            var result = _master.ProductDetails(obj);
+            return Json(new { data = result.data, recordFiltered = result.TotalRecords, recordTotal = result.TotalRecords, draw = Request["draw"] }, JsonRequestBehavior.AllowGet);
+        }
         #endregion
 
     }

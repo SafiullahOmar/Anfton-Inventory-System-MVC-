@@ -37,6 +37,9 @@ namespace Inventory_Anfton.BusinessLogic.IServices
         ResponseCls RemoveAttribute(RequestCls obj);
         AttributeRespCls GetAtttribute(RequestParam obj);
         #endregion
+        ResponseCls AddProduct(ProductReq obj);
+        ProductRespCls ProductDetails(RequestParam obj);
+
     }
-}
+
 }

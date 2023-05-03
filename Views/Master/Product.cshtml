@@ -1,0 +1,240 @@
+﻿
+@{
+    ViewBag.Title = "Product";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Product</h2>
+
+<section class="content">
+    <div class="row">
+        <!-- left column -->
+        <div class="col-md-12">
+            <!-- general form elements -->
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Product </h3>
+                </div>
+                <!-- /.box-header -->
+                <!-- form start -->
+                <form role="form" id="productform" method="post">
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">Name</label>
+                                    <input type="text" class="form-control" id="txtName" name="Name" placeholder="Name" autocomplete="off">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="exampleInputPassword1">Price</label>
+                                    <input type="text" class="form-control" id="txtPrice" name="Price" placeholder="Price" autocomplete="off">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="exampleInputPassword1">Quantity</label>
+                                    <input type="text" class="form-control" id="txtQuantity" name="Quantity" placeholder="Quantity" autocomplete="off">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="Item" class="">Item </label>
+                                    <select id="Item" class="form-select" name="Item">
+                                        <option>selected --</option>
+                                        <option>....</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="category" class="">Category </label>
+                                    <select id="Category" class="form-select" name="Category">
+                                        <option>selected --</option>
+                                        <option>....</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="warehoue" class="">Warehouse</label>
+                                    <select id="warehouse" class="form-select" name="Warehouse">
+                                        <option>selected --</option>
+                                        <option>....</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="availablility" class="">Availablity</label>
+                                        <select id="Availibality" class="form-control" name="Availibility">
+                                            <option>selected --</option>
+                                            <option>....</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.box-body -->
+
+                    <div class="box-footer">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title"> Product List</h4>
+            <div id="dtTableDetail">
+                <table id="tblProduct" class="table table-striped table-bordered dt-responsive nowrap" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Price</th>
+                            <th>Quantity</th>
+                            <th>Item</th>
+                            <th>Category</th>
+                            <th>Warehosue</th>
+                            <th>Availablity</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+@section scripts{
+    <script type="text/javascript">
+             $(document).ready(function () {
+
+            editOrDelete();
+                 $('#productform').validate({
+            rules: {
+                         Name: { required: true },
+                         Price: { required: true },
+                         Quantity: { required: true },
+                         Item: { required: true },
+                         Warehouse: { required: true },
+                         Category: { required: true },
+                         Availibility: { required: true }
+            },
+            messages: {
+                Name: "Enter valid Name",
+                Price: "Enter valid Name",
+                Quantity: "Enter valid Name",
+                Item: "Enter valid Name",
+                Warehouse: "Enter valid Name",
+                Category: "Enter valid Name",
+                Availibility: "Enter valid Name"
+            },
+
+            submitHandler: function (e) {
+               
+                var ProductReq = {
+                    Name: $('#txtName').val(),
+                    Price: $('#txtPrice').val(),
+                    Quantity: $('#txtQuantity').val(),
+                    Item: $('#Item').val(),
+                    Warehouse: $('#warehouse').val(),
+                    Category: $('#Category').val(),
+                    Availibility: $('#Availibality').val()
+
+                }
+                var URLApi = '@Url.Content("~")' + "Master/AddProduct";
+                $.ajax({
+                    url: URLApi,
+                    type: 'POST',
+                    data: JSON.stringify(RequestCls),
+                    async: false,
+                    cache: false,
+                    contentType: 'application/json;charset=utf-8',
+                    success: function (data) {
+                        alert(data.message);
+                        $('#productform')[0].reset();
+
+                        $('txtHidden').val('0');
+                    },
+                    error: function (data) {
+                        alert(data.messages);
+                    }
+
+                });
+            }
+            });
+
+        });
+
+    $(function () {
+
+        bindItems();
+        bindCategory();
+        BindWarehouse();
+    });
+    function bindItems() {
+        var URLAPI = '@Url.Content("~/")' + "Master/BindItemddl";
+        alert();
+        $.ajax({
+            type: 'GET',
+            url: URLAPI,
+            dataType: "json",
+            contentType: "application/json;charset-utf-9",
+            success: function (data) {
+                var Item = document.getElementById('Item');
+                var option = '';
+                option = option + '<option value="">select bracnh</option>';
+                for (var i = 0; i < data.length; i++) {
+                    option = option + '<option value=' + data[i].Value + '>' + data[i].Text + '</option>';
+                    $('#Item').html(option);
+                }
+            }
+        });
+    }
+    function bindCategory() {
+        var URLAPI = '@Url.Content("~/")' + "Master/BindCategoryddl";
+        $.ajax({
+            type: 'GET',
+            url: URLAPI,
+            dataType: "json",
+            contentType: "application/json;charset-utf-9",
+            processData: false,
+            success: function (data) {
+                var Item = document.getElementById('Category');
+                var option = '';
+                option = option + '<option value="">select category</option>';
+                for (var i = 0; i < data.length; i++) {
+                    option = option + '<option value=' + data[i].Value + '>' + data[i].Text + '</option>';
+                    $('#Category').html(option);
+                }
+            }
+        });
+    }
+    function BindWarehouse() {
+        var URLAPI = '@Url.Content("~/")' + "Master/BindWarehouseddl";
+        $.ajax({
+            type: 'GET',
+            url: URLAPI,
+            dataType: "json",
+            contentType: "application/json;charset-utf-9",
+            processData: false,
+            success: function (data) {
+                var Item = document.getElementById('Category');
+                var option = '';
+                option = option + '<option value="">select category</option>';
+                for (var i = 0; i < data.length; i++) {
+                    option = option + '<option value=' + data[i].Value + '>' + data[i].Text + '</option>';
+                    $('#warehouse').html(option);
+                }
+            }
+        });
+    }
+    </script>
+}

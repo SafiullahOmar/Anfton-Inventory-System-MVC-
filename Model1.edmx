@@ -29,6 +29,19 @@
           <Property Name="Name" Type="nvarchar" MaxLength="50" />
           <Property Name="active" Type="int" />
         </EntityType>
+        <EntityType Name="Product">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" />
+          <Property Name="Price" Type="decimal" Precision="18" Scale="0" />
+          <Property Name="Quantity" Type="int" />
+          <Property Name="Category" Type="int" />
+          <Property Name="Warehouse" Type="int" />
+          <Property Name="Availability" Type="int" />
+          <Property Name="Item" Type="int" />
+        </EntityType>
         <EntityType Name="Warehouse">
           <Key>
             <PropertyRef Name="Id" />
@@ -41,6 +54,7 @@
           <EntitySet Name="Attribute" EntityType="Self.Attribute" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Category" EntityType="Self.Category" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Item" EntityType="Self.Item" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Product" EntityType="Self.Product" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Warehouse" EntityType="Self.Warehouse" Schema="dbo" store:Type="Tables" />
         </EntityContainer>
       </Schema></edmx:StorageModels>
@@ -60,6 +74,7 @@
           <EntitySet Name="Items" EntityType="Inventory_AnftonModel.Item" />
           <EntitySet Name="Attributes" EntityType="Inventory_AnftonModel.Attribute" />
           <EntitySet Name="Warehouses" EntityType="Inventory_AnftonModel.Warehouse" />
+          <EntitySet Name="Products" EntityType="Inventory_AnftonModel.Product" />
         </EntityContainer>
         <EntityType Name="Item">
           <Key>
@@ -84,6 +99,19 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="Active" Type="Int32" />
+        </EntityType>
+        <EntityType Name="Product">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Price" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="Quantity" Type="Int32" />
+          <Property Name="Category" Type="Int32" />
+          <Property Name="Warehouse" Type="Int32" />
+          <Property Name="Availability" Type="Int32" />
+          <Property Name="Item" Type="Int32" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -122,6 +150,20 @@
             <EntityTypeMapping TypeName="Inventory_AnftonModel.Warehouse">
               <MappingFragment StoreEntitySet="Warehouse">
                 <ScalarProperty Name="Active" ColumnName="Active" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Products">
+            <EntityTypeMapping TypeName="Inventory_AnftonModel.Product">
+              <MappingFragment StoreEntitySet="Product">
+                <ScalarProperty Name="Item" ColumnName="Item" />
+                <ScalarProperty Name="Availability" ColumnName="Availability" />
+                <ScalarProperty Name="Warehouse" ColumnName="Warehouse" />
+                <ScalarProperty Name="Category" ColumnName="Category" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>

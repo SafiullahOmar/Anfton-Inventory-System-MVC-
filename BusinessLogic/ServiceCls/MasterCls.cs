@@ -1,4 +1,5 @@
 ﻿using Inventory_Anfton.BusinessLogic.IServices;
+using Inventory_Anfton.Models;
 using Inventory_Anfton.Utilites.RequestCls;
 using Inventory_Anfton.Utilites.ResponseCls;
 using System;
@@ -566,10 +567,120 @@ namespace Inventory_Anfton.BusinessLogic.ServiceCls
             return result;
         }
 
-      
 
 
 
+
+        #endregion
+
+        #region Product
+        public ResponseCls AddProduct(ProductReq obj)
+        {
+            ResponseCls result = new ResponseCls();
+            result.message = "Data Saved Successfully";
+            result.status = "Succes";
+            result.flag = 1;
+
+            try
+            {
+
+                using (var db = dbEntity)
+                {
+
+                        Product product = new Product();
+                        product.Name =obj.Name;
+                        product.Price = Convert.ToDecimal( obj.Price);
+                        product.Quantity = obj.Quantity;
+                        product.Item = obj.Item;
+                        product.Category = obj.Category;
+                        product.Warehouse = obj.warhouse;
+                        product.Availability = obj.Availibility;
+                        db.Products.Add(product);
+                        db.SaveChanges();
+                    
+                }
+            }
+            catch (Exception ex)
+            {
+
+                result.message = ex.InnerException.Message.ToString();
+                result.status = "Error";
+                result.flag = 0;
+            }
+
+            return result;
+        }
+
+        public ProductRespCls ProductDetails(RequestParam obj)
+        {
+            ProductRespCls result = new ProductRespCls();
+            result.message = "Success";
+            result.TotalRecords = 0;
+            result.data = null;
+
+
+            try
+            {
+
+                using (var db = new Inventory_AnftonEntities())
+                {
+                    if (!string.IsNullOrEmpty(obj.Search))
+                    {
+                        result.TotalRecords = (from x in db.Products where x.Name.Contains(obj.Search) select x).Count();
+                        var data = (from x in db.Products
+                                    join y in db.Items on x.Item equals y.Id
+                                    join c in db.Categories on x.Category equals c.Id
+                                    join v in db.Warehouses on x.Warehouse equals v.Id
+
+                                    where x.Name.Contains(obj.Search) 
+                                    orderby x.Id descending
+                                    select new productDTO
+                                    {
+                                        Id = x.Id,
+                                        Name = x.Name,
+                                        Price = x.Price.ToString(),
+                                        Quantity = (int)x.Quantity,
+                                        Item = y.Name,
+                                        Category = c.Name,
+                                        warhouse = v.Name,
+                                        Availibility = x.Availability
+
+                                    } )
+                            .Skip((obj.PageNo == 0 ? 0 : obj.PageNo - 1) * obj.PageLength)
+                            .Take(obj.PageLength)
+                            .ToList();
+                    }
+                    else
+                    {
+                        result.TotalRecords = (from x in db.Products select x).Count();
+                        var data = (from x in db.Products join y in db.Items on x.Item equals y.Id
+                                    join c in db.Categories on x.Category equals c.Id
+                                    join v in db.Warehouses on x.Warehouse equals v.Id
+
+
+                                    orderby x.Id descending select new productDTO {
+                                        Id=x.Id,
+                                        Name = x.Name,
+                                        Price = x.Price.ToString(),
+                                        Quantity= (int)x.Quantity,
+                                        Item=y.Name,
+                                        Category=c.Name,
+                                        warhouse=v.Name,
+                                        Availibility=x.Availability
+
+                                    })
+                            .ToList();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                result.message = ex.Message.ToString();
+
+            }
+
+            return result;
+        }
         #endregion
     }
 }

@@ -11,6 +11,9 @@
   <EntityContainer Name="Inventory_AnftonEntities" annotation:LazyLoadingEnabled="true">
     <EntitySet Name="Categories" EntityType="Self.Category" />
     <EntitySet Name="Items" EntityType="Inventory_AnftonModel.Item" />
+    <EntitySet Name="Attributes" EntityType="Inventory_AnftonModel.Attribute" />
+    <EntitySet Name="Warehouses" EntityType="Inventory_AnftonModel.Warehouse" />
+    <EntitySet Name="Products" EntityType="Inventory_AnftonModel.Product" />
   </EntityContainer>
   <EntityType Name="Item">
     <Key>
@@ -19,5 +22,34 @@
     <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
     <Property Name="active" Type="Int32" />
+  </EntityType>
+  <EntityType Name="Attribute">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Active" Type="Int32" />
+  </EntityType>
+  <EntityType Name="Warehouse">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Active" Type="Int32" />
+  </EntityType>
+  <EntityType Name="Product">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Price" Type="Decimal" Precision="18" Scale="0" />
+    <Property Name="Quantity" Type="Int32" />
+    <Property Name="Category" Type="Int32" />
+    <Property Name="Warehouse" Type="Int32" />
+    <Property Name="Availability" Type="Int32" />
+    <Property Name="Item" Type="Int32" />
   </EntityType>
 </Schema>

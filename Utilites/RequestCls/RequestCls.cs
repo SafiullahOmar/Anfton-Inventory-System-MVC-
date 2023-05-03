@@ -18,4 +18,16 @@ namespace Inventory_Anfton.Utilites.RequestCls
         public string Search { get; set; }
 
     }
+
+    public class ProductReq {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public decimal Price { get; set; }
+        public int Quantity { get; set; }
+        public int Item { get; set; }
+        public int Category { get; set; }
+        public int warhouse { get; set; }
+        public int Availibility { get; set; }
+
+    }
 }
