@@ -250,6 +250,12 @@ namespace Inventory_Anfton.Controllers
             var result = _master.ProductDetails(obj);
             return Json(new { data = result.data, recordFiltered = result.TotalRecords, recordTotal = result.TotalRecords, draw = Request["draw"] }, JsonRequestBehavior.AllowGet);
         }
+        [HttpPost]
+        public JsonResult RemoveProduct(RequestCls obj)
+        {
+            var result = _master.RemoveProduct(obj);
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
         #endregion
 
     }

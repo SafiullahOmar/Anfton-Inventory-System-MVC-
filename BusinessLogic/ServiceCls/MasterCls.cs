@@ -586,16 +586,33 @@ namespace Inventory_Anfton.BusinessLogic.ServiceCls
 
                 using (var db = dbEntity)
                 {
-
+                    if (obj.Id > 0)
+                    {
+                        Product product=(from x in db.Products where x.Id == obj.Id select x).FirstOrDefault();
+                        if (product!=null) {
+                            product.Name = obj.Name;
+                            product.Price = Convert.ToDecimal(obj.Price);
+                            product.Quantity = obj.Quantity;
+                            product.Item = obj.Item;
+                            product.Category = obj.Category;
+                            product.Warehouse = obj.warhouse;
+                            product.Availability = obj.Availibility;
+                            db.Products.Add(product);
+                            result.message = "Data Saved updated";
+                        }
+                    }
+                    else {
                         Product product = new Product();
-                        product.Name =obj.Name;
-                        product.Price = Convert.ToDecimal( obj.Price);
+                        product.Name = obj.Name;
+                        product.Price = Convert.ToDecimal(obj.Price);
                         product.Quantity = obj.Quantity;
                         product.Item = obj.Item;
                         product.Category = obj.Category;
                         product.Warehouse = obj.warhouse;
                         product.Availability = obj.Availibility;
                         db.Products.Add(product);
+                    }
+                       
                         db.SaveChanges();
                     
                 }
@@ -677,6 +694,44 @@ namespace Inventory_Anfton.BusinessLogic.ServiceCls
             {
                 result.message = ex.Message.ToString();
 
+            }
+
+            return result;
+        }
+
+        public ResponseCls RemoveProduct(RequestCls obj)
+        {
+            ResponseCls result = new ResponseCls();
+
+
+            try
+            {
+
+                using (var db = dbEntity)
+                {
+                    if (obj.Id > 0)
+                    {
+                        Product resp = (from x in db.Products where x.Id == obj.Id select x).FirstOrDefault();
+                        db.Products.Remove(resp);
+                        db.SaveChanges();
+                        result.message = "Data removed Successfully";
+                        result.status = "Succes";
+                        result.flag = 1;
+                    }
+
+
+
+
+
+
+
+                }
+            }
+            catch (Exception ex)
+            {
+                result.message = ex.InnerException.Message.ToString();
+                result.status = "Error";
+                result.flag = 0;
             }
 
             return result;

@@ -82,6 +82,8 @@
                     </div>
                     <!-- /.box-body -->
 
+                    <input type="hidden" id="txthidden" />
+
                     <div class="box-footer">
                         <button type="submit" class="btn btn-primary">Submit</button>
                     </div>
@@ -114,11 +116,11 @@
 </section>
 @section scripts{
     <script type="text/javascript">
-             $(document).ready(function () {
-
-            editOrDelete();
-                 $('#productform').validate({
-            rules: {
+        $(document).ready(function () {
+            showProduct();
+             editOrDelete();
+             $('#productform').validate({
+             rules: {
                          Name: { required: true },
                          Price: { required: true },
                          Quantity: { required: true },
@@ -138,8 +140,9 @@
             },
 
             submitHandler: function (e) {
-               
+
                 var ProductReq = {
+                    Id=$('#txthidden').val(),
                     Name: $('#txtName').val(),
                     Price: $('#txtPrice').val(),
                     Quantity: $('#txtQuantity').val(),
@@ -159,8 +162,8 @@
                     contentType: 'application/json;charset=utf-8',
                     success: function (data) {
                         alert(data.message);
+                        $("#tblProduct").dataTable().fnDestroy();
                         $('#productform')[0].reset();
-
                         $('txtHidden').val('0');
                     },
                     error: function (data) {
@@ -173,12 +176,72 @@
 
         });
 
-    $(function () {
+
+      function showProduct(calling) {
+
+          $("#tblProduct").DataTable({
+
+                "processing": true, // for show progress bar
+                "serverSide": true, // for process server side
+                "filter": true, // this is for disable filter (search box)
+                "orderMulti": false, // for disable multiple column at once
+                "pageLength": 5,
+
+                "ajax": {
+                    "url": '@Url.Content("~")' + "Master/GetProduct",
+                    "type": "POST",
+                    "Async": false,
+                    "datatype": "json",
+                    cache: false
+                },
+
+
+                "columns": [
+                    { "data": "Name", "name": "Name", "autoWidth": true },
+                    { "data": "Price", "name": "Name", "autoWidth": true },
+                    { "data": "Quantity", "name": "Name", "autoWidth": true },
+                    { "data": "Item", "name": "Name", "autoWidth": true },
+                    { "data": "Category", "name": "Name", "autoWidth": true },
+                    { "data": "Warehosue", "name": "Name", "autoWidth": true },
+                    { "data": "Availablity", "name": "Name", "autoWidth": true },
+                    {
+                        "data": "Availablity", "name": "Availablity", "autoWidth": true, "render": function (value) {
+                            if (value == 1) {
+                                return '<span>Available </span>'
+                            } else {
+                                return '<span> In-Active </span>'
+                            }
+                        }
+                    },
+                    {
+                        data:"Id","name":"Id","autowidth":true, "render": function (data, type, full, meta)
+                        {
+                            return '<a href="#" class="btn btn-info edit" href="#">Edit</a>' +
+                                '<a href="#" class="btn btn-info delete text-danger" href="#">Delete</a>';
+                        }
+                    },
+
+
+
+                ]
+
+            });
+
+            if (calling == 1) {
+                $('#tblAttribute').DataTable().ajax.reload();
+                alert('called');
+            }
+        }
+
+
+
+        $(function () {
 
         bindItems();
         bindCategory();
         BindWarehouse();
     });
+
     function bindItems() {
         var URLAPI = '@Url.Content("~/")' + "Master/BindItemddl";
         alert();
@@ -237,4 +300,66 @@
         });
     }
     </script>
+
+    <script type="text/javascript">
+
+        function editOrDelete() {
+            $(document.body).on('click', 'tr', function (e) {
+                e.preventDefault();
+                var data = $('#tblProduct').DataTable().row(this).data();
+                console.log(e.target);
+                if (e.target.className == 'btn btn-info edit') {
+                    alert('edit');
+                    $('html,body').animate({ scrollTop: 0 }, 1200);
+                    $('#txtName').val(data.Name);
+                    $('#txtPrice').val(data.Price);
+                    $('#txtQuantity').val(data.Quantity);
+                    $('#warehouse option:contains(' + data.warhouse + ')').attr('Selected', 'Selected');
+                    $('#Category option:contains(' + data.Category + ')').attr('Selected', 'Selected');
+                    $('#Item option:contains(' + data.Item + ')').attr('Selected', 'Selected');
+                    $('#Availibality option:contains(' + data.Availibility + ')').attr('Selected', 'Selected');
+                     
+                    $('#txthidden').val(data.Id);
+
+
+                    if (data.active == 1) {
+                        $('#closeButton').prop('checked', true);
+
+                    } else {
+                        $('#closeButton').prop('checked', true);
+                    }
+                } else if (e.target.className == 'btn btn-info delete text-danger') {
+                    if (confirm("are you sure to delete ?")) {
+
+                        $('#txthidden').val(data.Id);
+                        var RequestCls = {
+                            Id: $('#txthidden').val()
+
+                        }
+                        var URLApi = '@Url.Content("~")' + "Master/RemoveProduct";
+                        $.ajax({
+                            url: URLApi,
+                            type: 'POST',
+                            data: JSON.stringify(RequestCls),
+                            contentType: 'application/json;charset=utf-8',
+                            cache: false,
+                            success: function (data) {
+                                $("#tblProduct").dataTable().fnDestroy();
+                                showProduct(1);
+                                $('#productform')[0].reset();
+
+                            },
+                            error: function (data) {
+                                alert(data.messages);
+                            }
+
+                        });
+                    }
+                }
+
+
+            });
+        }
+    </script>
+
 }

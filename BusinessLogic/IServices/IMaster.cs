@@ -39,7 +39,7 @@ namespace Inventory_Anfton.BusinessLogic.IServices
         #endregion
         ResponseCls AddProduct(ProductReq obj);
         ProductRespCls ProductDetails(RequestParam obj);
-
+        ResponseCls RemoveProduct(RequestCls obj);
     }
 
 }
