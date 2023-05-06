@@ -10,6 +10,8 @@
         <EntityTypeShape EntityType="Inventory_AnftonModel.Attribute" Width="1.5" PointX="0.75" PointY="3.75" />
         <EntityTypeShape EntityType="Inventory_AnftonModel.Warehouse" Width="1.5" PointX="2.75" PointY="3.75" />
         <EntityTypeShape EntityType="Inventory_AnftonModel.Product" Width="1.5" PointX="5.375" PointY="0.75" />
+        <EntityTypeShape EntityType="Inventory_AnftonModel.Order" Width="1.5" PointX="4.875" PointY="3.75" />
+        <EntityTypeShape EntityType="Inventory_AnftonModel.Orders_Item" Width="1.5" PointX="7" PointY="3.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

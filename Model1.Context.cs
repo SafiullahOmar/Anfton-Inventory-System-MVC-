@@ -30,5 +30,7 @@ namespace Inventory_Anfton
         public virtual DbSet<Attribute> Attributes { get; set; }
         public virtual DbSet<Warehouse> Warehouses { get; set; }
         public virtual DbSet<Product> Products { get; set; }
+        public virtual DbSet<Order> Orders { get; set; }
+        public virtual DbSet<Orders_Item> Orders_Item { get; set; }
     }
 }
